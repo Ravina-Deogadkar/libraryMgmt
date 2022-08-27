@@ -19,4 +19,11 @@ public class LibraryServiceTest {
 
         Assertions.assertNull(books);
     }
+
+    @Test
+    public void shouldReturnBooks(){
+        var books=libraryService.fetchBooks();
+
+        Assertions.assertNotNull(books);
+    }
 }
