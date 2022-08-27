@@ -9,9 +9,20 @@ public class Book {
 
     public String subtitle;
 
-    public LocalDate firstPublishDate;
+    public String firstPublishDate;
 
     public String description;
+
+    public Book() {
+    }
+
+    public Book(int id, String title, String subtitle, String firstPublishDate, String description) {
+        this.id = id;
+        this.title = title;
+        this.subtitle = subtitle;
+        this.firstPublishDate = firstPublishDate;
+        this.description = description;
+    }
 
     public String getTitle() {
         return title;
@@ -29,11 +40,11 @@ public class Book {
         this.subtitle = subtitle;
     }
 
-    public LocalDate getFirstPublishDate() {
+    public String getFirstPublishDate() {
         return firstPublishDate;
     }
 
-    public void setFirstPublishDate(LocalDate firstPublishDate) {
+    public void setFirstPublishDate(String firstPublishDate) {
         this.firstPublishDate = firstPublishDate;
     }
 
