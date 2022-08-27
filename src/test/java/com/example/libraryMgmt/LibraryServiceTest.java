@@ -24,6 +24,6 @@ public class LibraryServiceTest {
     public void shouldReturnBooks(){
         var books=libraryService.fetchBooks();
 
-        Assertions.assertNotNull(books);
+        Assertions.assertTrue(books.size()>0);
     }
 }
