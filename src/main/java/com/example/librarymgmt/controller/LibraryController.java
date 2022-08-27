@@ -24,6 +24,6 @@ public class LibraryController {
     @RequestMapping("/books")
     @ResponseBody
     public List<Book> fetch(){
-        return null;
+        return libraryService.fetchBooks();
     }
 }
