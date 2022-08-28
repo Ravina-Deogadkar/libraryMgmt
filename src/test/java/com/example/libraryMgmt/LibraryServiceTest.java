@@ -19,12 +19,12 @@ public class LibraryServiceTest {
     @Autowired
     LibraryService libraryService;
 
-    @Test
-    public void shouldReturnNull(){
-        var books=libraryService.fetchBooks();
+    // @Test
+    // public void shouldReturnNull(){
+    //     var books=libraryService.fetchBooks();
 
-        Assertions.assertNull(books);
-    }
+    //     Assertions.assertNull(books);
+    // }
 
     @Test
     public void shouldReturnBooks(){

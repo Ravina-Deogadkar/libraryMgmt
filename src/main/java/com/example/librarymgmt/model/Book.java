@@ -13,6 +13,16 @@ public class Book {
 
     private String description;
 
+    private Character isAvailable;
+
+    public Character getIsAvailable() {
+        return isAvailable;
+    }
+
+    public void setIsAvailable(Character isAvailable) {
+        this.isAvailable = isAvailable;
+    }
+
     public Book() {
     }
 

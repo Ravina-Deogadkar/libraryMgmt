@@ -43,16 +43,16 @@ public class LibraryControllerTest {
         Assertions.assertEquals("Hello", libraryController.helloString());
     }
 
-    @Test
-    void shouldReturnEmpty() throws Exception{
-        String uri = "/books";
-        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(uri)
-        .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
-        Assertions.assertEquals(200, mvcResult.getResponse().getStatus());
-        String result  = mvcResult.getResponse().getContentAsString();
+    // @Test
+    // void shouldReturnEmpty() throws Exception{
+    //     String uri = "/books";
+    //     MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(uri)
+    //     .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+    //     Assertions.assertEquals(200, mvcResult.getResponse().getStatus());
+    //     String result  = mvcResult.getResponse().getContentAsString();
 
-        Assertions.assertEquals(result,"");
-    }
+    //     Assertions.assertEquals(result,"");
+    // }
 
     @Test
     void shouldReturnBooks() throws Exception{

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,7 @@ public class LibraryService {
 			TypeReference<List<Book>> typeReference = new TypeReference<List<Book>>(){};
 			InputStream inputStream = TypeReference.class.getResourceAsStream("/data/books.json");
 			try {
-				books = mapper.readValue(inputStream,typeReference);
+				books = mapper.readValue(inputStream,typeReference).stream().filter(book -> book.getIsAvailable().equals('Y')).collect(Collectors.toList());
 			} catch (IOException e){
 				System.out.println("Unable to fetch books: " + e.getMessage());
 			}
@@ -39,6 +40,10 @@ public class LibraryService {
 		}
 		borrowList.add(bookId);
 		user.setBorrowed(borrowList);
+
+		//set isVisble to false for the bookid
+
+
 		return user;
 	}
 
