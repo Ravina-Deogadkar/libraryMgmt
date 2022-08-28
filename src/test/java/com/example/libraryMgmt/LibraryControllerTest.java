@@ -1,5 +1,6 @@
 package com.example.libraryMgmt;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -88,9 +89,29 @@ public class LibraryControllerTest {
         Assertions.assertTrue(resultUser.getBorrowed().size()>0);
     }
 
+    @Test
+    void shouldAddOnly2BooksToBorrowList() throws Exception{
+        var borrowList = new ArrayList<Integer>();
+        borrowList.add(44234);
+        borrowList.add(43562);
+        User user = new User(345, "Alex", "Crossing Street", borrowList);
+        ObjectMapper objectMapper=new ObjectMapper();
+        String userString = objectMapper.writeValueAsString(user);
+        String uri = "/book/add/{bookid}";
+        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders
+            .put(uri, 44234)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .content(userString)
+        )
+        .andReturn();
+
+        Assertions.assertEquals(400, mvcResult.getResponse().getStatus());
+    }
+
 
     @Test
     void shouldRemoveBookFromLibrary() throws Exception{
+        
         User user = new User(345, "Alex", "Crossing Street", null);
         int bookId = 44234;
         ObjectMapper objectMapper=new ObjectMapper();
@@ -123,4 +144,6 @@ public class LibraryControllerTest {
         Assertions.assertEquals(bookMatched.size(),0);
 
     }
+
+    
 }
