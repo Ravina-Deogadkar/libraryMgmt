@@ -33,7 +33,7 @@ public class LibraryController {
     @RequestMapping(value = "/book/add/{bookid}", method=RequestMethod.PUT)
     @ResponseBody
     public User addBooks(@PathVariable("bookid") Integer bookId, @RequestBody User user){
-        if(user.getBorrowed().size()==2)
+        if(user.getBorrowed()!=null && user.getBorrowed().size()==2)
             throw new BorrowLimitException("Above Borrow Limit");
             
         return libraryService.addBooks(user, bookId);

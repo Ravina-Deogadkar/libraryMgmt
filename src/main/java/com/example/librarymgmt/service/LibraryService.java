@@ -58,7 +58,7 @@ public class LibraryService {
 			books = mapper.readValue(inputStream,typeReference);
 		
 			for(Book book : books){
-				if(book.getId()==bookId){
+				if(book.getId()==bookId && book.getCopyAvailable()==1){
 					book.setIsAvailable('N');
 				}
 			}

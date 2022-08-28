@@ -15,23 +15,19 @@ public class Book {
 
     private Character isAvailable;
 
-    public Character getIsAvailable() {
-        return isAvailable;
-    }
-
-    public void setIsAvailable(Character isAvailable) {
-        this.isAvailable = isAvailable;
-    }
+    private int copyAvailable;
 
     public Book() {
     }
 
-    public Book(int id, String title, String subtitle, String firstPublishDate, String description) {
+    public Book(int id, String title, String subtitle, String firstPublishDate, String description, Character isAvailable, int copyAvailable) {
         this.id = id;
         this.title = title;
         this.subtitle = subtitle;
         this.firstPublishDate = firstPublishDate;
         this.description = description;
+        this.isAvailable = isAvailable;
+        this.copyAvailable = copyAvailable;
     }
 
     public String getTitle() {
@@ -72,6 +68,21 @@ public class Book {
 
     public void setId(int id) {
         this.id = id;
+    }
+    public int getCopyAvailable() {
+        return copyAvailable;
+    }
+
+    public void setCopyAvailable(int copyAvailable) {
+        this.copyAvailable = copyAvailable;
+    }
+
+    public Character getIsAvailable() {
+        return isAvailable;
+    }
+
+    public void setIsAvailable(Character isAvailable) {
+        this.isAvailable = isAvailable;
     }
 
 }
