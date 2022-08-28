@@ -32,8 +32,14 @@ public class LibraryService {
         return books;
     }
 
-	public String addBooks(User user, int bookId){
-		return "Books added to borrowlist";
+	public User addBooks(User user, int bookId){
+		List<Integer> borrowList = new ArrayList<>();
+		if(user.getBorrowed()!=null){
+			borrowList = user.getBorrowed();
+		}
+		borrowList.add(bookId);
+		user.setBorrowed(borrowList);
+		return user;
 	}
 
     

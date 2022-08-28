@@ -30,7 +30,7 @@ public class LibraryController {
 
     @RequestMapping(value = "/book/add/{bookid}", method=RequestMethod.PUT)
     @ResponseBody
-    public String addBooks(@PathVariable("bookid") Integer bookId, @RequestBody User user){
+    public User addBooks(@PathVariable("bookid") Integer bookId, @RequestBody User user){
         return libraryService.addBooks(user, bookId);
     }
 }
