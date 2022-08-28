@@ -62,15 +62,9 @@ public class LibraryService {
 					book.setIsAvailable('N');
 				}
 			}
-		}catch (IOException e){
-			System.out.println("Unable to fetch books: " + e.getMessage());
-		}
-
-		ObjectMapper objectMapper = new ObjectMapper();
-		try {
+		
 			File file = new File("src/main/resources/data/books.json");
-			FileOutputStream out = new FileOutputStream(file);
-			objectMapper.writeValue(file, books);
+			mapper.writeValue(file, books);
 
 		} catch (StreamWriteException e) {
 			e.printStackTrace();
