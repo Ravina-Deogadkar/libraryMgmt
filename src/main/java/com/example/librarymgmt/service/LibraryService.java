@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.example.librarymgmt.model.Book;
+import com.example.librarymgmt.model.User;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -30,6 +31,10 @@ public class LibraryService {
 
         return books;
     }
+
+	public String addBooks(User user, int bookId){
+		return "Books added to borrowlist";
+	}
 
     
 }

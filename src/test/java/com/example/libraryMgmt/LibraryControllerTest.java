@@ -2,6 +2,7 @@ package com.example.libraryMgmt;
 
 import java.util.List;
 
+import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.example.librarymgmt.controller.LibraryController;
 import com.example.librarymgmt.model.Book;
+import com.example.librarymgmt.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
@@ -61,5 +63,25 @@ public class LibraryControllerTest {
         ObjectMapper objectMapper = new ObjectMapper();
         List<Book> booklist = objectMapper.readValue(result, List.class);
         Assertions.assertTrue(booklist.size() > 0);
+    }
+
+    @Test
+    void shouldAddBookToBorrowList() throws Exception{
+        User user = new User(345, "Alex", "Crossing Street", null);
+        ObjectMapper objectMapper=new ObjectMapper();
+        String userString = objectMapper.writeValueAsString(user);
+        String uri = "/book/add/{bookid}";
+        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders
+            .put(uri, 44234)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .content(userString)
+        )
+        .andReturn();
+
+        Assertions.assertEquals(200, mvcResult.getResponse().getStatus());
+        String result  = mvcResult.getResponse().getContentAsString();
+
+
+        Assertions.assertEquals(result, "Books added to borrowlist");
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.librarymgmt.model.Book;
+import com.example.librarymgmt.model.User;
 import com.example.librarymgmt.service.LibraryService;
 
 @RestController
@@ -21,9 +22,15 @@ public class LibraryController {
         return "Hello";
     }
 
-    @RequestMapping("/books")
+    @RequestMapping(value = "/books", method=RequestMethod.GET)
     @ResponseBody
     public List<Book> fetch(){
         return libraryService.fetchBooks();
+    }
+
+    @RequestMapping(value = "/book/add/{bookid}", method=RequestMethod.PUT)
+    @ResponseBody
+    public String addBooks(@PathVariable("bookid") Integer bookId, @RequestBody User user){
+        return libraryService.addBooks(user, bookId);
     }
 }
