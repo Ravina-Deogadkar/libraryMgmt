@@ -49,10 +49,11 @@ public class LibraryServiceTest {
         User response= libraryService.addBooks(user,bookId );
         //Assertions.assertTrue(response.getBorrowed().size()>0);
 
+        
         List<Book> books=libraryService.fetchBooks();
 
         List<Book> bookMatched = books.stream().filter(book->book.getId()==bookId).collect(Collectors.toList());
         
-        Assertions.assertNull(bookMatched);
+        Assertions.assertEquals(bookMatched.size(),0);
     }
 }

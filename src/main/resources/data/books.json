@@ -1,34 +1,34 @@
 [
-        {
-            "id":387215,
-            "title":"The Existential Adulteration of Harry Potter",
-            "subtitle":"The Existential Adulteration of Harry Potter",
-            "firstPublishDate":"1970-01-01",
-            "isAvailable":"Y",
-            "description":"When someone finally moves into the old, dark, musty house next door, two boys make an unusual friend."
-        },
-        {
-            "id":32734,
-            "title":"Alice. 'Come on.",
-            "subtitle":"Alice. 'Come on.",
-            "firstPublishDate":"1979-03-04",
-            "isAvailable":"Y",
-            "description":"King said to herself. Imagine her surprise, when the Rabbit came up to the Gryphon. 'How the creatures order one about, and called out 'The Queen! The Queen!' and the Queen said to one of the words."
-        },
-        {
-            "id":43562,
-            "title":"As she said to.",
-            "subtitle":"As she said to.",
-            "firstPublishDate":"1997-09-28",
-            "isAvailable":"N",
-            "description":"When I used to read fairy-tales, I fancied that kind of authority over Alice. 'Stand up and went by without noticing her. Then followed the Knave of Hearts, and I don't know where Dinn may be,' said."
-        },
-        {
-            "id":44234,
-            "title":"Alice replied.",
-            "subtitle":"Alice replied.",
-            "firstPublishDate":"2006-10-21",
-            "isAvailable":"Y",
-            "description":"I WAS when I sleep is the same solemn tone, only changing the order of the e--e--evening, Beautiful, beauti--FUL SOUP!' 'Chorus again!' cried the Mock Turtle persisted. 'How COULD he turn them out."
-        }
+    {
+        "id": 387215,
+        "title": "The Existential Adulteration of Harry Potter",
+        "subtitle": "The Existential Adulteration of Harry Potter",
+        "firstPublishDate": "1970-01-01",
+        "description": "When someone finally moves into the old, dark, musty house next door, two boys make an unusual friend.",
+        "isAvailable": "Y"
+    },
+    {
+        "id": 32734,
+        "title": "Alice. 'Come on.",
+        "subtitle": "Alice. 'Come on.",
+        "firstPublishDate": "1979-03-04",
+        "description": "King said to herself. Imagine her surprise, when the Rabbit came up to the Gryphon. 'How the creatures order one about, and called out 'The Queen! The Queen!' and the Queen said to one of the words.",
+        "isAvailable": "Y"
+    },
+    {
+        "id": 43562,
+        "title": "As she said to.",
+        "subtitle": "As she said to.",
+        "firstPublishDate": "1997-09-28",
+        "description": "When I used to read fairy-tales, I fancied that kind of authority over Alice. 'Stand up and went by without noticing her. Then followed the Knave of Hearts, and I don't know where Dinn may be,' said.",
+        "isAvailable": "N"
+    },
+    {
+        "id": 44234,
+        "title": "Alice replied.",
+        "subtitle": "Alice replied.",
+        "firstPublishDate": "2006-10-21",
+        "description": "I WAS when I sleep is the same solemn tone, only changing the order of the e--e--evening, Beautiful, beauti--FUL SOUP!' 'Chorus again!' cried the Mock Turtle persisted. 'How COULD he turn them out.",
+        "isAvailable": "N"
+    }
 ]

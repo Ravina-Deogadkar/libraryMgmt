@@ -120,6 +120,7 @@ public class LibraryControllerTest {
 
         var bookMatched = bookList.stream().filter(book->book.getId()==bookId).collect(Collectors.toList());
         
-        Assertions.assertNull(bookMatched);
+        Assertions.assertEquals(bookMatched.size(),0);
+
     }
 }
