@@ -3,15 +3,15 @@ package com.example.librarymgmt.model;
 import java.time.LocalDate;
 
 public class Book {
-    public int id;
+    private int id;
 
-    public String title;
+    private String title;
 
-    public String subtitle;
+    private String subtitle;
 
-    public String firstPublishDate;
+    private String firstPublishDate;
 
-    public String description;
+    private String description;
 
     public Book() {
     }
