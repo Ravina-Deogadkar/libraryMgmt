@@ -1,5 +1,7 @@
 package com.example.libraryMgmt;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,6 +21,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.example.librarymgmt.controller.LibraryController;
+import com.example.librarymgmt.exception.BorrowLimitException;
+import com.example.librarymgmt.exception.DuplicateCopyBorrowException;
 import com.example.librarymgmt.model.Book;
 import com.example.librarymgmt.model.User;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -90,7 +94,7 @@ public class LibraryControllerTest {
     }
 
     @Test
-    void shouldAddOnly2BooksToBorrowList() throws Exception{
+    void shouldAddOnlyTwoBooksToBorrowList() throws Exception{
         var borrowList = new ArrayList<Integer>();
         borrowList.add(44234);
         borrowList.add(43562);
@@ -102,12 +106,36 @@ public class LibraryControllerTest {
             .put(uri, 44234)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
             .content(userString)
-        )
+        ).andExpect(result -> Assertions.assertTrue(result.getResolvedException() instanceof BorrowLimitException))
+        
         .andReturn();
 
         Assertions.assertEquals(400, mvcResult.getResponse().getStatus());
+
+        Assertions.assertEquals(mvcResult.getResponse().getErrorMessage(), "Borrow list already have two books");
+
     }
 
+    @Test
+    void shouldAddOnlyOneCopyOfBooksToBorrowList() throws Exception{
+        var borrowList = new ArrayList<Integer>();
+        borrowList.add(44234);
+        User user = new User(345, "Alex", "Crossing Street", borrowList);
+        ObjectMapper objectMapper=new ObjectMapper();
+        String userString = objectMapper.writeValueAsString(user);
+        String uri = "/book/add/{bookid}";
+        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders
+            .put(uri, 44234)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .content(userString)
+        ).andExpect(result -> Assertions.assertTrue(result.getResolvedException() instanceof DuplicateCopyBorrowException))
+        .andReturn();
+
+        
+        Assertions.assertEquals(400, mvcResult.getResponse().getStatus());
+
+        Assertions.assertEquals(mvcResult.getResponse().getErrorMessage(), "Copy already exist in borrow list");
+    }
 
     @Test
     void shouldRemoveBookFromLibrary() throws Exception{
@@ -181,7 +209,6 @@ public class LibraryControllerTest {
 
         var bookAfter = bookListAfter.stream().filter(book->book.getId()==bookId).collect(Collectors.toList());
         
-
         Assertions.assertTrue(bookBefore.get(0).getCopyAvailable()>bookAfter.get(0).getCopyAvailable());
     }
 }

@@ -4,12 +4,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(
     value = HttpStatus.BAD_REQUEST, 
-    reason = "Borrow list already have two books"
+    reason = "Book unavailable"
 )
-public class BorrowLimitException 
+public class BookUnavailableException 
         extends RuntimeException {
  
-    public BorrowLimitException(String string) {
+    public BookUnavailableException(String string) {
         super(string);
     }
 }

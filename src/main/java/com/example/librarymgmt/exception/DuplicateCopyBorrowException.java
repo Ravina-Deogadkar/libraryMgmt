@@ -4,12 +4,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(
     value = HttpStatus.BAD_REQUEST, 
-    reason = "Borrow list already have two books"
+    reason = "Copy already exist in borrow list"
 )
-public class BorrowLimitException 
+public class DuplicateCopyBorrowException 
         extends RuntimeException {
  
-    public BorrowLimitException(String string) {
+    public DuplicateCopyBorrowException(String string) {
         super(string);
     }
 }
