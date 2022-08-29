@@ -1,7 +1,6 @@
 package com.example.librarymgmt.service;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -19,53 +18,53 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class LibraryService {
-    
 
+	public List<Book> fetchBooks() {
 
-    public List<Book> fetchBooks(){
+		List<Book> books = new ArrayList<>();
+		ObjectMapper mapper = new ObjectMapper();
+		TypeReference<List<Book>> typeReference = new TypeReference<List<Book>>() {
+		};
+		InputStream inputStream = TypeReference.class.getResourceAsStream("/data/books.json");
+		try {
+			var response = mapper.readValue(inputStream, typeReference);
+			books = response.stream().filter(book -> book.getIsAvailable().equals('Y')).collect(Collectors.toList());
+		} catch (IOException e) {
+			System.out.println("Unable to fetch books: " + e.getMessage());
+		}
 
-        List<Book> books=new ArrayList<>();
-        ObjectMapper mapper = new ObjectMapper();
-			TypeReference<List<Book>> typeReference = new TypeReference<List<Book>>(){};
-			InputStream inputStream = TypeReference.class.getResourceAsStream("/data/books.json");
-			try {
-				var response = mapper.readValue(inputStream,typeReference);
-				books = response.stream().filter(book -> book.getIsAvailable().equals('Y')).collect(Collectors.toList());
-			} catch (IOException e){
-				System.out.println("Unable to fetch books: " + e.getMessage());
-			}
+		return books;
+	}
 
-        return books;
-    }
-
-	public User addBooks(User user, int bookId){
-		//assuming books are already available.
+	public User addBooks(User user, int bookId) {
+		// assuming books are already available.
 		List<Integer> borrowList = new ArrayList<>();
-		if(user.getBorrowed()!=null){
+		if (user.getBorrowed() != null) {
 			borrowList = user.getBorrowed();
 		}
 		borrowList.add(bookId);
 		user.setBorrowed(borrowList);
 
-		//set isVisble to false for the bookid
-		//List<Book> books =fetchBooks();
+		// set isVisble to false for the bookid
+		// List<Book> books =fetchBooks();
 
-		//copying this code to not delete data from json file
-        ObjectMapper mapper = new ObjectMapper();
-		TypeReference<List<Book>> typeReference = new TypeReference<List<Book>>(){};
-			InputStream inputStream = TypeReference.class.getResourceAsStream("/data/books.json");
+		// copying this code to not delete data from json file
+		ObjectMapper mapper = new ObjectMapper();
+		TypeReference<List<Book>> typeReference = new TypeReference<List<Book>>() {
+		};
+		InputStream inputStream = TypeReference.class.getResourceAsStream("/data/books.json");
 		List<Book> books = new ArrayList<>();
 		try {
-			books = mapper.readValue(inputStream,typeReference);
-		
-			for(Book book : books){
-				if(book.getId()==bookId && book.getCopyAvailable()>0){
-					if(book.getCopyAvailable()==1)
+			books = mapper.readValue(inputStream, typeReference);
+
+			for (Book book : books) {
+				if (book.getId() == bookId) {
+					if (book.getCopyAvailable() == 1)
 						book.setIsAvailable('N');
-					book.setCopyAvailable(book.getCopyAvailable()-1);
+					book.setCopyAvailable(book.getCopyAvailable() - 1);
 				}
 			}
-		
+
 			File file = new File("src/main/resources/data/books.json");
 			mapper.writeValue(file, books);
 
@@ -79,5 +78,4 @@ public class LibraryService {
 		return user;
 	}
 
-    
 }
