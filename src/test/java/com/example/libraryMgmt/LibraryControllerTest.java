@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.example.librarymgmt.controller.LibraryController;
+import com.example.librarymgmt.exception.BookUnavailableException;
 import com.example.librarymgmt.exception.BorrowLimitException;
 import com.example.librarymgmt.exception.DuplicateCopyBorrowException;
 import com.example.librarymgmt.model.Book;
@@ -117,7 +118,7 @@ public class LibraryControllerTest {
     }
 
     @Test
-    void shouldAddOnlyOneCopyOfBooksToBorrowList() throws Exception{
+    void shouldAddOnlyOneCopyOfBookToBorrowList() throws Exception{
         var borrowList = new ArrayList<Integer>();
         borrowList.add(44234);
         User user = new User(345, "Alex", "Crossing Street", borrowList);
@@ -135,6 +136,28 @@ public class LibraryControllerTest {
         Assertions.assertEquals(400, mvcResult.getResponse().getStatus());
 
         Assertions.assertEquals(mvcResult.getResponse().getErrorMessage(), "Copy already exist in borrow list");
+    }
+
+
+    @Test
+    void shouldNotAddBookToBorrowList() throws Exception{
+        var borrowList = new ArrayList<Integer>();
+        borrowList.add(42321);
+        User user = new User(345, "Alex", "Crossing Street", borrowList);
+        ObjectMapper objectMapper=new ObjectMapper();
+        String userString = objectMapper.writeValueAsString(user);
+        String uri = "/book/add/{bookid}";
+        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders
+            .put(uri, 88231)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .content(userString)
+        ).andExpect(result -> Assertions.assertTrue(result.getResolvedException() instanceof BookUnavailableException))
+        .andReturn();
+
+        
+        Assertions.assertEquals(400, mvcResult.getResponse().getStatus());
+
+        Assertions.assertEquals(mvcResult.getResponse().getErrorMessage(), "Book unavailable");
     }
 
     @Test
