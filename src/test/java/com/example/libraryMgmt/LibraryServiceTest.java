@@ -56,4 +56,23 @@ public class LibraryServiceTest {
         
         Assertions.assertEquals(bookMatched.size(),0);
     }
+
+    @Test
+    public void shouldReduceCopyAvailableCount() throws InterruptedException{
+        User user = new User(345, "Alex", "Crossing Street", null);
+        int bookId=43562;
+
+        List<Book> books=libraryService.fetchBooks();
+
+        List<Book> bookBefore = books.stream().filter(book->book.getId()==bookId).collect(Collectors.toList());
+
+        User response= libraryService.addBooks(user, bookId);
+
+        Thread.sleep(3000);
+        List<Book> booksAfter=libraryService.fetchBooks();
+
+        List<Book> bookAfter = booksAfter.stream().filter(book->book.getId()==bookId).collect(Collectors.toList());
+
+        Assertions.assertTrue(bookBefore.get(0).getCopyAvailable()>bookAfter.get(0).getCopyAvailable());
+    }
 }

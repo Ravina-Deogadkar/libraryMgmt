@@ -29,7 +29,8 @@ public class LibraryService {
 			TypeReference<List<Book>> typeReference = new TypeReference<List<Book>>(){};
 			InputStream inputStream = TypeReference.class.getResourceAsStream("/data/books.json");
 			try {
-				books = mapper.readValue(inputStream,typeReference).stream().filter(book -> book.getIsAvailable().equals('Y')).collect(Collectors.toList());
+				var response = mapper.readValue(inputStream,typeReference);
+				books = response.stream().filter(book -> book.getIsAvailable().equals('Y')).collect(Collectors.toList());
 			} catch (IOException e){
 				System.out.println("Unable to fetch books: " + e.getMessage());
 			}
@@ -58,8 +59,10 @@ public class LibraryService {
 			books = mapper.readValue(inputStream,typeReference);
 		
 			for(Book book : books){
-				if(book.getId()==bookId && book.getCopyAvailable()==1){
-					book.setIsAvailable('N');
+				if(book.getId()==bookId && book.getCopyAvailable()>0){
+					if(book.getCopyAvailable()==1)
+						book.setIsAvailable('N');
+					book.setCopyAvailable(book.getCopyAvailable()-1);
 				}
 			}
 		

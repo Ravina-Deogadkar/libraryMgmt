@@ -145,5 +145,43 @@ public class LibraryControllerTest {
 
     }
 
-    
+    @Test
+    void shouldReduceCopyAvailableCount() throws Exception{
+       
+        User user = new User(345, "Alex", "Crossing Street", null);
+        int bookId = 43562;
+
+        ObjectMapper objectMapper=new ObjectMapper();
+
+        MvcResult mvcResult1 = mvc.perform(MockMvcRequestBuilders.get("/books")
+        .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+        Assertions.assertEquals(200, mvcResult1.getResponse().getStatus());
+        String books  = mvcResult1.getResponse().getContentAsString();
+
+        List<Book> bookList = objectMapper.readValue(books,new TypeReference<List<Book>>(){});
+
+        var bookBefore = bookList.stream().filter(book->book.getId()==bookId).collect(Collectors.toList());
+        
+        String userString = objectMapper.writeValueAsString(user);
+        String uri = "/book/add/{bookid}";
+        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders
+            .put(uri, bookId)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .content(userString)
+        )
+        .andReturn();
+
+        Thread.sleep(2000);
+        MvcResult mvcResult2 = mvc.perform(MockMvcRequestBuilders.get("/books")
+        .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+        Assertions.assertEquals(200, mvcResult1.getResponse().getStatus());
+        String books1 = mvcResult2.getResponse().getContentAsString();
+
+        List<Book> bookListAfter = objectMapper.readValue(books1,new TypeReference<List<Book>>(){});
+
+        var bookAfter = bookListAfter.stream().filter(book->book.getId()==bookId).collect(Collectors.toList());
+        
+
+        Assertions.assertTrue(bookBefore.get(0).getCopyAvailable()>bookAfter.get(0).getCopyAvailable());
+    }
 }
