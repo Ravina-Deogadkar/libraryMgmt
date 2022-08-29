@@ -1,12 +1,9 @@
 package com.example.libraryMgmt;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -222,6 +219,7 @@ public class LibraryControllerTest {
         )
         .andReturn();
 
+        Assertions.assertEquals(200,mvcResult.getResponse().getStatus());
         Thread.sleep(2000);
         MvcResult mvcResult2 = mvc.perform(MockMvcRequestBuilders.get("/books")
         .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
@@ -234,4 +232,49 @@ public class LibraryControllerTest {
         
         Assertions.assertTrue(bookBefore.get(0).getCopyAvailable()>bookAfter.get(0).getCopyAvailable());
     }
+
+
+    @Test
+    void shouldIncreaseCopyAvailableCount() throws Exception{
+       
+        var borrowList = new ArrayList<Integer>();
+        borrowList.add(44234);
+        borrowList.add(43562);
+        User user = new User(345, "Alex", "Crossing Street", borrowList);
+        int bookId = 43562;
+
+        ObjectMapper objectMapper=new ObjectMapper();
+
+        MvcResult mvcResult1 = mvc.perform(MockMvcRequestBuilders.get("/books")
+        .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+        Assertions.assertEquals(200, mvcResult1.getResponse().getStatus());
+        String books  = mvcResult1.getResponse().getContentAsString();
+
+        List<Book> bookList = objectMapper.readValue(books,new TypeReference<List<Book>>(){});
+
+        var bookBefore = bookList.stream().filter(book->book.getId()==bookId).collect(Collectors.toList());
+        
+        String userString = objectMapper.writeValueAsString(user);
+        String uri = "/book/return/{bookid}";
+        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders
+            .put(uri, bookId)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .content(userString)
+        )
+        .andReturn();
+
+        Thread.sleep(2000);
+        MvcResult mvcResult2 = mvc.perform(MockMvcRequestBuilders.get("/books")
+        .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+        Assertions.assertEquals(200, mvcResult1.getResponse().getStatus());
+        String books1 = mvcResult2.getResponse().getContentAsString();
+
+        List<Book> bookListAfter = objectMapper.readValue(books1,new TypeReference<List<Book>>(){});
+
+        var bookAfter = bookListAfter.stream().filter(book->book.getId()==bookId).collect(Collectors.toList());
+        
+        Assertions.assertTrue(bookBefore.get(0).getCopyAvailable()<bookAfter.get(0).getCopyAvailable());
+    }
+
+
 }

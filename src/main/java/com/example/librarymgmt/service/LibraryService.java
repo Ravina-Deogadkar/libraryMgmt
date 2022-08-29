@@ -78,4 +78,9 @@ public class LibraryService {
 		return user;
 	}
 
+
+	public User returnBooks(User user, int bookId) {
+		return user;
+	}
+
 }

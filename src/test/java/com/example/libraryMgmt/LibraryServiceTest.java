@@ -1,7 +1,7 @@
 package com.example.libraryMgmt;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Assertions;
@@ -74,5 +74,28 @@ public class LibraryServiceTest {
         List<Book> bookAfter = booksAfter.stream().filter(book->book.getId()==bookId).collect(Collectors.toList());
 
         Assertions.assertTrue(bookBefore.get(0).getCopyAvailable()>bookAfter.get(0).getCopyAvailable());
+    }
+
+    @Test
+    public void shouldIncreaseCopyAvailableCount() throws InterruptedException{
+        var borrowList = new ArrayList<Integer>();
+        borrowList.add(44234);
+        borrowList.add(43562);
+        
+        User user = new User(345, "Alex", "Crossing Street", borrowList);
+        int bookId=43562;
+
+        List<Book> books=libraryService.fetchBooks();
+
+        List<Book> bookBefore = books.stream().filter(book->book.getId()==bookId).collect(Collectors.toList());
+
+        User response= libraryService.addBooks(user, bookId);
+
+        Thread.sleep(3000);
+        List<Book> booksAfter=libraryService.fetchBooks();
+
+        List<Book> bookAfter = booksAfter.stream().filter(book->book.getId()==bookId).collect(Collectors.toList());
+
+        Assertions.assertTrue(bookBefore.get(0).getCopyAvailable()<bookAfter.get(0).getCopyAvailable());
     }
 }

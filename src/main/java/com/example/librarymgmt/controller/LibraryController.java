@@ -49,4 +49,11 @@ public class LibraryController {
 
         return libraryService.addBooks(user, bookId);
     }
+
+    @RequestMapping(value = "/book/return/{bookid}", method=RequestMethod.PUT)
+    @ResponseBody
+    public User returnBooks(@PathVariable("bookid") Integer bookId, @RequestBody User user){
+
+        return user;
+    }
 }
