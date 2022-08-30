@@ -126,4 +126,15 @@ public class LibraryServiceTest {
 
         Assertions.assertEquals('Y',bookMatched.get(0).getIsAvailable());
     }
+
+    @Test
+    public void shouldRemoveBookFromBorrowList(){
+        var borrowList = new ArrayList<Integer>();
+        borrowList.add(44234);
+        User user = new User(345, "Alex", "Crossing Street", borrowList);
+
+        User response= libraryService.returnBooks(user, 44234);
+        Assertions.assertFalse(response.getBorrowed().contains(44234));
+    }
+
 }

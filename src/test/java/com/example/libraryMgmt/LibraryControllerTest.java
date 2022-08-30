@@ -328,4 +328,27 @@ public class LibraryControllerTest {
         Assertions.assertEquals('Y', bookMatched.get(0).getIsAvailable());
     }
 
+    @Test
+    void shouldRemoveBookFromBorrowList() throws Exception{
+        var borrowList = new ArrayList<Integer>();
+        borrowList.add(44234);
+        User user = new User(345, "Alex", "Crossing Street", borrowList);
+        ObjectMapper objectMapper=new ObjectMapper();
+        String userString = objectMapper.writeValueAsString(user);
+        String uri = "/books/return/{bookid}";
+        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders
+            .put(uri, 44234)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .content(userString)
+        )
+        .andReturn();
+
+        Assertions.assertEquals(200, mvcResult.getResponse().getStatus());
+        String result  = mvcResult.getResponse().getContentAsString();
+
+        ObjectMapper jsonMapper = new ObjectMapper();
+        User resultUser = jsonMapper.readValue(result, User.class);
+        Assertions.assertFalse(resultUser.getBorrowed().contains(44234));
+    }
+
 }
