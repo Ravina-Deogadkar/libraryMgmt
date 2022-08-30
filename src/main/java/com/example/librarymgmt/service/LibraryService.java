@@ -1,8 +1,5 @@
 package com.example.librarymgmt.service;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,10 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.librarymgmt.model.Book;
 import com.example.librarymgmt.model.User;
-import com.fasterxml.jackson.core.exc.StreamWriteException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DatabindException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.librarymgmt.util.FileUtils;
 
 @Service
 public class LibraryService {
@@ -22,16 +16,8 @@ public class LibraryService {
 	public List<Book> fetchBooks() {
 
 		List<Book> books = new ArrayList<>();
-		ObjectMapper mapper = new ObjectMapper();
-		TypeReference<List<Book>> typeReference = new TypeReference<List<Book>>() {
-		};
-		InputStream inputStream = TypeReference.class.getResourceAsStream("/data/books.json");
-		try {
-			var response = mapper.readValue(inputStream, typeReference);
-			books = response.stream().filter(book -> book.getIsAvailable().equals('Y')).collect(Collectors.toList());
-		} catch (IOException e) {
-			System.out.println("Unable to fetch books: " + e.getMessage());
-		}
+		var response = FileUtils.readBooksFromFile();
+		books = response.stream().filter(book -> book.getIsAvailable().equals('Y')).collect(Collectors.toList());
 
 		return books;
 	}
@@ -46,66 +32,45 @@ public class LibraryService {
 		user.setBorrowed(borrowList);
 
 		// set isVisble to false for the bookid
-		// List<Book> books =fetchBooks();
-
-		// copying this code to not delete data from json file
-		ObjectMapper mapper = new ObjectMapper();
-		TypeReference<List<Book>> typeReference = new TypeReference<List<Book>>() {
-		};
-		InputStream inputStream = TypeReference.class.getResourceAsStream("/data/books.json");
-		List<Book> books = new ArrayList<>();
-		try {
-			books = mapper.readValue(inputStream, typeReference);
-
-			for (Book book : books) {
-				if (book.getId() == bookId) {
-					if (book.getCopyAvailable() == 1)
-						book.setIsAvailable('N');
-					book.setCopyAvailable(book.getCopyAvailable() - 1);
-				}
+		List<Book> books = FileUtils.readBooksFromFile();
+		for (Book book : books) {
+			if (book.getId() == bookId) {
+				if (book.getCopyAvailable() == 1)
+					book.setIsAvailable('N');
+				book.setCopyAvailable(book.getCopyAvailable() - 1);
 			}
-
-			File file = new File("src/main/resources/data/books.json");
-			mapper.writeValue(file, books);
-
-		} catch (StreamWriteException e) {
-			e.printStackTrace();
-		} catch (DatabindException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
+
+		FileUtils.writeBooksToFile(books);
 		return user;
 	}
 
-
 	public User returnBooks(User user, int bookId) {
-		
-		ObjectMapper mapper = new ObjectMapper();
-		TypeReference<List<Book>> typeReference = new TypeReference<List<Book>>() {
-		};
-		InputStream inputStream = TypeReference.class.getResourceAsStream("/data/books.json");
-		List<Book> books = new ArrayList<>();
-		try {
-			books = mapper.readValue(inputStream, typeReference);
 
-			for (Book book : books) {
-				if (book.getId() == bookId) {
-					book.setCopyAvailable(book.getCopyAvailable() + 1);
-				}
+		List<Book> books = FileUtils.readBooksFromFile();
+		for (Book book : books) {
+			if (book.getId() == bookId) {
+				book.setCopyAvailable(book.getCopyAvailable() + 1);
 			}
-
-			File file = new File("src/main/resources/data/books.json");
-			mapper.writeValue(file, books);
-
-		} catch (StreamWriteException e) {
-			e.printStackTrace();
-		} catch (DatabindException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
+		FileUtils.writeBooksToFile(books);
+		
 		return user;
+	}
+
+	// Only for testing
+	public String setBook(Book book) {
+		List<Book> books = FileUtils.readBooksFromFile();
+		for(int i=0; i<books.size();i++){
+			if(books.get(i).getId() == book.getId()){
+				books.remove(i);
+			}
+		}
+		books.add(book);
+
+		FileUtils.writeBooksToFile(books);
+
+		return "Successful";
 	}
 
 }

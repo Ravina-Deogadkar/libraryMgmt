@@ -1,7 +1,5 @@
 package com.example.librarymgmt.model;
 
-import java.time.LocalDate;
-
 public class Book {
     private int id;
 
