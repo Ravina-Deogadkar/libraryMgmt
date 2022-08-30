@@ -43,16 +43,21 @@ public class LibraryServiceTest {
 
 
     @Test
-    public void shouldRemoveBookFromLibrary(){
+    public void shouldRemoveBookFromLibrary() throws InterruptedException{
+        Book newbook = new Book(45556,"Alice in Wonderland", "Alice in Wonderland", "2006-10-21","",'Y',1);
+        
+        libraryService.setBook(newbook);
+        Thread.sleep(3000);
+        
         User user = new User(345, "Alex", "Crossing Street", null);
-        int bookId=32734;
-        User response= libraryService.addBooks(user,bookId );
+        User response= libraryService.addBooks(user,newbook.getId() );
         //Assertions.assertTrue(response.getBorrowed().size()>0);
 
+        Thread.sleep(3000);
         
         List<Book> books=libraryService.fetchBooks();
 
-        List<Book> bookMatched = books.stream().filter(book->book.getId()==bookId).collect(Collectors.toList());
+        List<Book> bookMatched = books.stream().filter(book->book.getId()==newbook.getId()).collect(Collectors.toList());
         
         Assertions.assertEquals(bookMatched.size(),0);
     }
@@ -97,5 +102,28 @@ public class LibraryServiceTest {
         List<Book> bookAfter = booksAfter.stream().filter(book->book.getId()==bookId).collect(Collectors.toList());
 
         Assertions.assertTrue(bookBefore.get(0).getCopyAvailable()<bookAfter.get(0).getCopyAvailable());
+    }
+
+
+    @Test
+    public void shouldAddUnAvailableBookToLibrary() throws InterruptedException{
+        var borrowList = new ArrayList<Integer>();
+        borrowList.add(44234);
+        borrowList.add(45556);
+
+        Book newbook = new Book(45556,"Alice in Wonderland", "Alice in Wonderland", "2006-10-21","",'N',0);
+        
+        libraryService.setBook(newbook);
+        Thread.sleep(3000);
+        User user = new User(345, "Alex", "Crossing Street", borrowList);
+
+        User response= libraryService.returnBooks(user, newbook.getId());
+
+        Thread.sleep(3000);
+        List<Book> books=libraryService.fetchBooks();
+
+        List<Book> bookMatched = books.stream().filter(book->book.getId()==newbook.getId()).collect(Collectors.toList());
+
+        Assertions.assertEquals('Y',bookMatched.get(0).getIsAvailable());
     }
 }

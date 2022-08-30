@@ -23,6 +23,7 @@ import com.example.librarymgmt.exception.BorrowLimitException;
 import com.example.librarymgmt.exception.DuplicateCopyBorrowException;
 import com.example.librarymgmt.model.Book;
 import com.example.librarymgmt.model.User;
+import com.example.librarymgmt.service.LibraryService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -35,6 +36,9 @@ public class LibraryControllerTest {
 
     @Autowired
    WebApplicationContext webApplicationContext;
+
+   @Autowired
+   LibraryService libraryService;
 
    @BeforeEach
     protected void setUp() {
@@ -160,13 +164,17 @@ public class LibraryControllerTest {
     @Test
     void shouldRemoveBookFromLibrary() throws Exception{
         
+        Book newbook = new Book(45556,"Alice in Wonderland", "Alice in Wonderland", "2006-10-21","",'Y',1);
+        
+        libraryService.setBook(newbook);
+        Thread.sleep(3000);
+
         User user = new User(345, "Alex", "Crossing Street", null);
-        int bookId = 32734;
         ObjectMapper objectMapper=new ObjectMapper();
         String userString = objectMapper.writeValueAsString(user);
         String uri = "/books/add/{bookid}";
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders
-            .put(uri, bookId)
+            .put(uri, newbook.getId())
             .contentType(MediaType.APPLICATION_JSON_VALUE)
             .content(userString)
         )
@@ -179,7 +187,8 @@ public class LibraryControllerTest {
         User resultUser = jsonMapper.readValue(result, User.class);
 
         Assertions.assertTrue(resultUser.getBorrowed().size()>0);
-
+        Thread.sleep(3000);
+        
         MvcResult mvcResult1 = mvc.perform(MockMvcRequestBuilders.get("/books")
         .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
         Assertions.assertEquals(200, mvcResult1.getResponse().getStatus());
@@ -187,9 +196,9 @@ public class LibraryControllerTest {
 
         List<Book> bookList = objectMapper.readValue(books,new TypeReference<List<Book>>(){});
 
-        var bookMatched = bookList.stream().filter(book->book.getId()==bookId).collect(Collectors.toList());
+        var bookMatched = bookList.stream().filter(book->book.getId()==newbook.getId()).collect(Collectors.toList());
         
-        Assertions.assertEquals(bookMatched.size(),0);
+        Assertions.assertEquals(0,bookMatched.size());
 
     }
 
@@ -278,5 +287,45 @@ public class LibraryControllerTest {
         Assertions.assertTrue(bookBefore.get(0).getCopyAvailable()<bookAfter.get(0).getCopyAvailable());
     }
 
+
+    @Test
+    void shouldAddUnAvailableBookToLibrary() throws Exception{
+       
+        var borrowList = new ArrayList<Integer>();
+        borrowList.add(44234);
+        borrowList.add(45556);
+
+        Book newbook = new Book(45556,"Alice in Wonderland", "Alice in Wonderland", "2006-10-21","",'N',0);
+        
+        libraryService.setBook(newbook);
+        Thread.sleep(3000);
+
+        User user = new User(345, "Alex", "Crossing Street", borrowList);
+
+        ObjectMapper objectMapper=new ObjectMapper();
+
+        String userString = objectMapper.writeValueAsString(user);
+        String uri = "/books/return/{bookid}";
+        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders
+            .put(uri, newbook.getId())
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .content(userString)
+        )
+        .andReturn();
+
+        Assertions.assertEquals(200,mvcResult.getResponse().getStatus());
+
+        Thread.sleep(3000);
+        MvcResult mvcResult2 = mvc.perform(MockMvcRequestBuilders.get("/books")
+        .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+        Assertions.assertEquals(200, mvcResult2.getResponse().getStatus());
+        String booksJson = mvcResult2.getResponse().getContentAsString();
+
+        List<Book> bookList = objectMapper.readValue(booksJson,new TypeReference<List<Book>>(){});
+
+        var bookMatched = bookList.stream().filter(book->book.getId()==book.getId()).collect(Collectors.toList());
+        
+        Assertions.assertEquals('Y', bookMatched.get(0).getIsAvailable());
+    }
 
 }
