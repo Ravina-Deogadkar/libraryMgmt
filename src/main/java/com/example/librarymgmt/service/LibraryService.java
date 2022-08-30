@@ -50,6 +50,8 @@ public class LibraryService {
 		List<Book> books = FileUtils.readBooksFromFile();
 		for (Book book : books) {
 			if (book.getId() == bookId) {
+				if (book.getCopyAvailable() == 0)
+					book.setIsAvailable('Y');
 				book.setCopyAvailable(book.getCopyAvailable() + 1);
 			}
 		}
