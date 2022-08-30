@@ -32,7 +32,7 @@ public class LibraryController {
         return libraryService.fetchBooks();
     }
 
-    @RequestMapping(value = "/book/add/{bookid}", method=RequestMethod.PUT)
+    @RequestMapping(value = "/books/add/{bookid}", method=RequestMethod.PUT)
     @ResponseBody
     public User addBooks(@PathVariable("bookid") Integer bookId, @RequestBody User user){
         if(user.getBorrowed()!=null && user.getBorrowed().size()==2)
@@ -50,10 +50,9 @@ public class LibraryController {
         return libraryService.addBooks(user, bookId);
     }
 
-    @RequestMapping(value = "/book/return/{bookid}", method=RequestMethod.PUT)
+    @RequestMapping(value = "/books/return/{bookid}", method=RequestMethod.PUT)
     @ResponseBody
     public User returnBooks(@PathVariable("bookid") Integer bookId, @RequestBody User user){
-
-        return user;
+        return libraryService.returnBooks(user, bookId);
     }
 }

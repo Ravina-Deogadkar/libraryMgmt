@@ -80,6 +80,31 @@ public class LibraryService {
 
 
 	public User returnBooks(User user, int bookId) {
+		
+		ObjectMapper mapper = new ObjectMapper();
+		TypeReference<List<Book>> typeReference = new TypeReference<List<Book>>() {
+		};
+		InputStream inputStream = TypeReference.class.getResourceAsStream("/data/books.json");
+		List<Book> books = new ArrayList<>();
+		try {
+			books = mapper.readValue(inputStream, typeReference);
+
+			for (Book book : books) {
+				if (book.getId() == bookId) {
+					book.setCopyAvailable(book.getCopyAvailable() + 1);
+				}
+			}
+
+			File file = new File("src/main/resources/data/books.json");
+			mapper.writeValue(file, books);
+
+		} catch (StreamWriteException e) {
+			e.printStackTrace();
+		} catch (DatabindException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return user;
 	}
 

@@ -75,7 +75,7 @@ public class LibraryControllerTest {
         User user = new User(345, "Alex", "Crossing Street", null);
         ObjectMapper objectMapper=new ObjectMapper();
         String userString = objectMapper.writeValueAsString(user);
-        String uri = "/book/add/{bookid}";
+        String uri = "/books/add/{bookid}";
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders
             .put(uri, 44234)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -99,7 +99,7 @@ public class LibraryControllerTest {
         User user = new User(345, "Alex", "Crossing Street", borrowList);
         ObjectMapper objectMapper=new ObjectMapper();
         String userString = objectMapper.writeValueAsString(user);
-        String uri = "/book/add/{bookid}";
+        String uri = "/books/add/{bookid}";
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders
             .put(uri, 44234)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -121,7 +121,7 @@ public class LibraryControllerTest {
         User user = new User(345, "Alex", "Crossing Street", borrowList);
         ObjectMapper objectMapper=new ObjectMapper();
         String userString = objectMapper.writeValueAsString(user);
-        String uri = "/book/add/{bookid}";
+        String uri = "/books/add/{bookid}";
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders
             .put(uri, 44234)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -143,7 +143,7 @@ public class LibraryControllerTest {
         User user = new User(345, "Alex", "Crossing Street", borrowList);
         ObjectMapper objectMapper=new ObjectMapper();
         String userString = objectMapper.writeValueAsString(user);
-        String uri = "/book/add/{bookid}";
+        String uri = "/books/add/{bookid}";
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders
             .put(uri, 88231)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -161,10 +161,10 @@ public class LibraryControllerTest {
     void shouldRemoveBookFromLibrary() throws Exception{
         
         User user = new User(345, "Alex", "Crossing Street", null);
-        int bookId = 44234;
+        int bookId = 32734;
         ObjectMapper objectMapper=new ObjectMapper();
         String userString = objectMapper.writeValueAsString(user);
-        String uri = "/book/add/{bookid}";
+        String uri = "/books/add/{bookid}";
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders
             .put(uri, bookId)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -211,7 +211,7 @@ public class LibraryControllerTest {
         var bookBefore = bookList.stream().filter(book->book.getId()==bookId).collect(Collectors.toList());
         
         String userString = objectMapper.writeValueAsString(user);
-        String uri = "/book/add/{bookid}";
+        String uri = "/books/add/{bookid}";
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders
             .put(uri, bookId)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -224,9 +224,9 @@ public class LibraryControllerTest {
         MvcResult mvcResult2 = mvc.perform(MockMvcRequestBuilders.get("/books")
         .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
         Assertions.assertEquals(200, mvcResult1.getResponse().getStatus());
-        String books1 = mvcResult2.getResponse().getContentAsString();
+        String booksJson = mvcResult2.getResponse().getContentAsString();
 
-        List<Book> bookListAfter = objectMapper.readValue(books1,new TypeReference<List<Book>>(){});
+        List<Book> bookListAfter = objectMapper.readValue(booksJson,new TypeReference<List<Book>>(){});
 
         var bookAfter = bookListAfter.stream().filter(book->book.getId()==bookId).collect(Collectors.toList());
         
@@ -255,7 +255,7 @@ public class LibraryControllerTest {
         var bookBefore = bookList.stream().filter(book->book.getId()==bookId).collect(Collectors.toList());
         
         String userString = objectMapper.writeValueAsString(user);
-        String uri = "/book/return/{bookid}";
+        String uri = "/books/return/{bookid}";
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders
             .put(uri, bookId)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -263,13 +263,15 @@ public class LibraryControllerTest {
         )
         .andReturn();
 
+        Assertions.assertEquals(200,mvcResult.getResponse().getStatus());
+
         Thread.sleep(2000);
         MvcResult mvcResult2 = mvc.perform(MockMvcRequestBuilders.get("/books")
         .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
         Assertions.assertEquals(200, mvcResult1.getResponse().getStatus());
-        String books1 = mvcResult2.getResponse().getContentAsString();
+        String booksJson = mvcResult2.getResponse().getContentAsString();
 
-        List<Book> bookListAfter = objectMapper.readValue(books1,new TypeReference<List<Book>>(){});
+        List<Book> bookListAfter = objectMapper.readValue(booksJson,new TypeReference<List<Book>>(){});
 
         var bookAfter = bookListAfter.stream().filter(book->book.getId()==bookId).collect(Collectors.toList());
         

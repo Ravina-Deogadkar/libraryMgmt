@@ -45,7 +45,7 @@ public class LibraryServiceTest {
     @Test
     public void shouldRemoveBookFromLibrary(){
         User user = new User(345, "Alex", "Crossing Street", null);
-        int bookId=44234;
+        int bookId=32734;
         User response= libraryService.addBooks(user,bookId );
         //Assertions.assertTrue(response.getBorrowed().size()>0);
 
@@ -89,7 +89,7 @@ public class LibraryServiceTest {
 
         List<Book> bookBefore = books.stream().filter(book->book.getId()==bookId).collect(Collectors.toList());
 
-        User response= libraryService.addBooks(user, bookId);
+        User response= libraryService.returnBooks(user, bookId);
 
         Thread.sleep(3000);
         List<Book> booksAfter=libraryService.fetchBooks();
