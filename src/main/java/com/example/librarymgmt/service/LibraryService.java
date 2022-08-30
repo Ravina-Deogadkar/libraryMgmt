@@ -47,6 +47,14 @@ public class LibraryService {
 
 	public User returnBooks(User user, int bookId) {
 
+		if (user.getBorrowed() != null) {
+			for(int i =0;i<user.getBorrowed().size();){
+				if(user.getBorrowed().get(i)==bookId){
+					user.getBorrowed().remove(i);
+					break;
+				}
+			}
+		}
 		List<Book> books = FileUtils.readBooksFromFile();
 		for (Book book : books) {
 			if (book.getId() == bookId) {
