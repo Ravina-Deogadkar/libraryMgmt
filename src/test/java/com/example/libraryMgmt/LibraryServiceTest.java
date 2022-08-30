@@ -137,4 +137,21 @@ public class LibraryServiceTest {
         Assertions.assertFalse(response.getBorrowed().contains(44234));
     }
 
+    @Test
+    public void shouldBorrowListBeEmpty() throws InterruptedException{
+        var borrowList = new ArrayList<Integer>();
+        borrowList.add(44234);
+        borrowList.add(43562);
+
+        User user = new User(345, "Alex", "Crossing Street", borrowList);
+
+        User response= libraryService.returnBooks(user, 44234);
+        Assertions.assertEquals(1,response.getBorrowed().size());
+        Thread.sleep(2000);
+
+        User response1= libraryService.returnBooks(user, 43562);
+        Assertions.assertEquals(0,response1.getBorrowed().size());
+
+    }
+
 }
