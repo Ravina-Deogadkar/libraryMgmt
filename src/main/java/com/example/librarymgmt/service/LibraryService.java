@@ -48,12 +48,8 @@ public class LibraryService {
 	public User returnBooks(User user, int bookId) {
 
 		if (user.getBorrowed() != null) {
-			for(int i =0;i<user.getBorrowed().size();){
-				if(user.getBorrowed().get(i)==bookId){
-					user.getBorrowed().remove(i);
-					break;
-				}
-			}
+
+			user.getBorrowed().remove(Integer.valueOf(bookId));
 		}
 		List<Book> books = FileUtils.readBooksFromFile();
 		for (Book book : books) {
@@ -73,10 +69,11 @@ public class LibraryService {
 		List<Book> books = FileUtils.readBooksFromFile();
 		for(int i=0; i<books.size();i++){
 			if(books.get(i).getId() == book.getId()){
-				books.remove(i);
+				books.get(i).setIsAvailable(book.getIsAvailable());
+				books.get(i).setCopyAvailable(book.getCopyAvailable());
+				break;
 			}
 		}
-		books.add(book);
 
 		FileUtils.writeBooksToFile(books);
 
