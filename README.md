@@ -12,9 +12,10 @@ This project is developed as part of assignment which covers up four user story.
 
 ## Installation
  - git clone 
- - cd to cloned repo location
- - gradle clean build
- - gradle test
+ - cd to cloned repo location and open in editor
+ - gradle clean build - build application and create jar file
+ - gradle test - to run all test cases
+ - gradle run - to run application
  
  ## Usage
  Once application is running, you can test application in the postman using
@@ -23,10 +24,14 @@ This project is developed as part of assignment which covers up four user story.
  
  **GET: ** localhost:8080/books
  
+ ![Fetch all books](https://github.com/Ravina-Deogadkar/libraryMgmt/blob/master/src/main/resources/static/get_request.png)
+ 
  ### Borrow books
  
  **PUT: ** localhost:8080/books/add/{bookid}
+ ![Borrow books](https://github.com/Ravina-Deogadkar/libraryMgmt/blob/master/src/main/resources/static/borrow_request.png)
  
  ### Return books
  
  **PUT: ** localhost:8080/books/return/{bookid}
+ ![Return books](https://github.com/Ravina-Deogadkar/libraryMgmt/blob/master/src/main/resources/static/return_request.png)
